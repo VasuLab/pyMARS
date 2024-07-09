@@ -5,7 +5,6 @@ import networkx
 import numpy as np
 import cantera as ct
 
-from . import soln2cti
 from .sampling import sample, sample_metrics, calculate_error
 from .reduce_model import trim, ReducedModel
 
@@ -180,9 +179,8 @@ def reduce_drg(model_file, species_targets, species_safe, threshold,
     reduced_model = trim(
         model_file, species_removed, f'reduced_{model_file}', phase_name=phase_name
         )
-    reduced_model_filename = soln2cti.write(
-        reduced_model, f'reduced_{reduced_model.n_species}.cti', path=path
-        )
+    reduced_model_filename = os.path.join(path, f'reduced_{reduced_model.n_species}.yaml')
+    reduced_model.write_yaml(reduced_model_filename)
 
     reduced_model_metrics = sample_metrics(
         reduced_model_filename, ignition_conditions, phase_name=phase_name, 
@@ -317,7 +315,9 @@ def run_drg(model_file, ignition_conditions, psr_conditions, flame_conditions,
             threshold_upper=threshold_upper, num_threads=num_threads, path=path
             )
     else:
-        soln2cti.write(reduced_model, f'reduced_{reduced_model.model.n_species}.cti', path=path)
+        reduced_model.model.write_yaml(
+            os.path.join(path, f'reduced_{reduced_model.model.n_species}.yaml')
+        )
     
     logging.info(45 * '-')
     logging.info('DRG reduction complete.')

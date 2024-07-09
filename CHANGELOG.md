@@ -15,7 +15,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Removed
 
-- Removed the `convert` function and command line option, instead use Cantera's `yaml2ck` and `ck2yaml` 
+- Removed the `convert` tool and command line option, instead use Cantera's `yaml2ck` and `ck2yaml` 
+- Removed `soln2ck` and `soln2cti` modules - internal calls are replaced with Cantera's `Solution.write_yaml` member 
+  function
 
 ### Fixed
 

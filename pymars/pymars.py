@@ -11,7 +11,6 @@ import cantera as ct
 # local imports
 from .sampling import sample_metrics, parse_ignition_inputs, parse_psr_inputs, parse_flame_inputs
 from .sampling import InputIgnition, InputPSR, InputLaminarFlame
-from . import soln2cti
 from .drgep import run_drgep
 from .drg import run_drg
 from .pfa import run_pfa
