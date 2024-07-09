@@ -6,9 +6,6 @@ import logging
 
 import numpy as np
 import cantera as ct
-from cantera import ck2cti
-
-from . import soln2ck
 
 
 def compare_models(model1, model2):
@@ -180,66 +177,3 @@ def compare_models(model1, model2):
                 return False
 
     return True
-
-
-def convert(model_file, thermo_file=None, transport_file=None, path=''):
-    """Function to convert between Cantera and Chemkin model formats.
-
-    Parameters
-    ----------
-    model_file : str
-        Input model file (Cantera .cti or Chemkin)
-    thermo_file : str, optional
-        Chemkin thermodynamic properties file
-    transport_file : str, optional
-        Chemkin transport data file
-    path : str, optional
-        Path for writing file
-
-    Returns
-    -------
-    str or list
-        Path to converted file, or list of files (for Chemkin)
-
-    Example
-    -------
-    >>> convert('gri30.inp')
-    gri30.cti
-
-    >>> convert('gri30.cti')
-    [gri30.inp, gri30_thermo.dat, gri30_transport.dat]
-
-    """
-    # check whether Chemkin or Cantera model
-    basename = os.path.splitext(os.path.basename(model_file))[0]
-    extension = os.path.splitext(os.path.basename(model_file))[1]
-
-    # Chemkin files can have multiple extensions, so easier to check if Cantera
-    if extension == '.cti':
-        # Convert from Cantera to Chemkin format.
-        logging.info('Converter detected Cantera input model: ' + model_file)
-        logging.info('Converting to Chemkin format.')
-
-        solution = ct.Solution(model_file)
-        converted_files = soln2ck.write(solution, basename + '.inp', path=path)
-        return converted_files
-    else:
-        # Convert from Chemkin to Cantera format.
-        logging.info('Converter detected Chemkin input model: ' + model_file)
-        logging.info('Converting to Cantera format.')
-
-        converted_file = os.path.join(path, basename + '.cti')
-
-        # calls ck2cti based on given files
-        args = [f'--input={model_file}']
-        if thermo_file:
-            args.append(f'--thermo={thermo_file}')
-        if transport_file:
-            args.append(f'--transport={transport_file}')
-        args.append(f'--output={converted_file}')
-        
-        # generally Chemkin files have issues (redundant species, etc.) that require this argument
-        args.append('--permissive')
-
-        ck2cti.main(args)
-        return converted_file

@@ -8,7 +8,7 @@ from tempfile import TemporaryDirectory
 import pytest
 import cantera as ct
 
-from ..tools import compare_models, convert
+from ..tools import compare_models
 
 def relative_location(file):
     file_path = os.path.join(file)
@@ -194,24 +194,3 @@ class TestCompareModels:
         gas2 = ct.Solution(species=gas.species(), reactions=[R2], thermo='IdealGas', kinetics='GasKinetics')
         
         assert not compare_models(gas1, gas2)
-    
-
-class TestConvert:
-    def test_convert_gri_to_chemkin(self):
-        """Test converting Cantera version of gri30 to Chemkin.
-        """
-        with TemporaryDirectory() as temp_dir:
-            output = convert('gri30.cti', path=temp_dir)
-            assert output == [
-                os.path.join(temp_dir, 'gri30.inp'), 
-                os.path.join(temp_dir, 'gri30_thermo.dat'), 
-                os.path.join(temp_dir, 'gri30_transport.dat')
-                ]
-    
-    def test_convert_gri_to_cantera(self):
-        """Test converting Chemkin version of gri30 to Cantera.
-        """
-        with TemporaryDirectory() as temp_dir:
-            output = convert(relative_location(os.path.join('assets', 'gri30.inp')), path=temp_dir)
-            assert output == os.path.join(temp_dir, 'gri30.cti')
-            assert compare_models(ct.Solution(output), ct.Solution('gri30.cti'))

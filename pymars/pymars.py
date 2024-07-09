@@ -16,7 +16,7 @@ from .drgep import run_drgep
 from .drg import run_drg
 from .pfa import run_pfa
 from .sensitivity_analysis import run_sa
-from .tools import convert
+
 
 #: Supported reduction methods
 METHODS = ['DRG', 'DRGEP', 'PFA']
@@ -244,13 +244,6 @@ def pymars(argv):
         type=int
         )
 
-    # Specifying conversion requires its own set of options
-    parser.add_argument(
-        '--convert',
-        help='Convert files between Cantera and Chemkin formats (.cti <=> .inp)',
-        action='store_true',
-        default=False,
-        )
     parser.add_argument(
         '-m', '--model',
         help='input model filename for conversion (e.g., "mech.cti").',
@@ -288,38 +281,25 @@ def pymars(argv):
             path=os.path.abspath(os.path.dirname(__file__))))
         sys.exit(0)
 
-    if args.convert:
-        if not args.model:
-            parser.error('Conversion requires specifying a model file.')
+    if not args.input:
+        parser.error('A YAML input file needs to be specified using -i or --input')
 
-        # Convert model and exit
-        files = convert(args.model, args.thermo, args.transport, args.path)
-        if isinstance(files, list):
-            logging.info('Converted files: ' + ' '.join(files))
-        else:
-            logging.info('Converted file: ' + files)
-    else:
-        if not args.input:
-            parser.error('A YAML input file needs to be specified using -i or --input')
+    with open(args.input, 'r') as the_file:
+        input_dict = yaml.safe_load(the_file)
 
-        with open(args.input, 'r') as the_file:
-            input_dict = yaml.safe_load(the_file)
-        
-        inputs = parse_inputs(input_dict)
+    inputs = parse_inputs(input_dict)
 
-        # Check for Chemkin format and convert if needed
-        if os.path.splitext(inputs.model)[1] != '.cti':
-            logging.info('Chemkin file detected; converting before reduction.')
-            inputs.model = convert(inputs.model, args.thermo, args.transport, args.path)
+    if os.path.splitext(inputs.model)[1] != '.yaml':
+        parser.error('Model must be in the Cantera YAML format.')
 
-        main(
-            inputs.model, inputs.error, 
-            inputs.ignition_conditions, inputs.psr_conditions, inputs.flame_conditions,
-            method=inputs.method, target_species=inputs.target_species,
-            safe_species=inputs.safe_species, phase_name=inputs.phase_name,
-            run_sensitivity_analysis=inputs.sensitivity_analysis, 
-            upper_threshold=inputs.upper_threshold, sensitivity_type=inputs.sensitivity_type, 
-            path=args.path, num_threads=args.num_threads
-            )
+    main(
+        inputs.model, inputs.error,
+        inputs.ignition_conditions, inputs.psr_conditions, inputs.flame_conditions,
+        method=inputs.method, target_species=inputs.target_species,
+        safe_species=inputs.safe_species, phase_name=inputs.phase_name,
+        run_sensitivity_analysis=inputs.sensitivity_analysis,
+        upper_threshold=inputs.upper_threshold, sensitivity_type=inputs.sensitivity_type,
+        path=args.path, num_threads=args.num_threads
+        )
     
     logging.shutdown()
