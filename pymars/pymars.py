@@ -248,18 +248,6 @@ def pymars(argv):
         help='input model filename for conversion (e.g., "mech.yaml").',
         type=str,
         )
-    parser.add_argument(
-        '--thermo',
-        help='thermodynamic data filename (only necessary for Chemkin files).',
-        type=str,
-        default=None
-        )
-    parser.add_argument(
-        '--transport',
-        help='transport data filename (only necessary for Chemkin files).',
-        type=str,
-        default=None
-        )
 
     parser.add_argument(
         '-V', '--version',
