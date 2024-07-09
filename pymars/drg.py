@@ -28,9 +28,9 @@ def create_drg_matrix(state, solution):
     temp, pressure, mass_fractions = state
     solution.TPY = temp, pressure, mass_fractions
 
-    net_stoich = solution.product_stoich_coeffs() - solution.reactant_stoich_coeffs()
-    flags = np.where(((solution.product_stoich_coeffs() != 0) |
-                        (solution.reactant_stoich_coeffs() !=0 )
+    net_stoich = solution.product_stoich_coeffs - solution.reactant_stoich_coeffs
+    flags = np.where(((solution.product_stoich_coeffs != 0) |
+                        (solution.reactant_stoich_coeffs !=0 )
                         ), 1, 0)
 
     # only consider contributions from reactions with nonzero net rates of progress
