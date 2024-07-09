@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Changed
 
+- Changed minimum Python version to 3.10 and minimum Cantera version to 3.0.1
+
 ### Fixed
 
 - Fixed bug in soln2ck.py where the reaction high rate was being used instead of the reaction low rate.

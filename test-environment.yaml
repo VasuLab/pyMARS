@@ -4,9 +4,9 @@ channels:
 - conda-forge
 - cantera
 dependencies:
-  - python>=3.7
+  - python>=3.10
   - numpy>=1.13.1
-  - cantera>=2.5.1
+  - cantera>=3.0.1
   - networkx
   - blosc=1.20.0
   - pytables

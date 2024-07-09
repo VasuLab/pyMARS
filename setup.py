@@ -27,7 +27,7 @@ long_description = readme + '\n\n' + changelog + '\n\n' + citation
 
 install_requires = [
     'numpy',
-    'cantera>=2.3.0',
+    'cantera>=3.0.1',
     'networkx',
     'tables',
     'pyyaml>=4.2b1'
@@ -74,6 +74,6 @@ setup(
     install_requires=install_requires,
     tests_require=tests_require,
     setup_requires=setup_requires,
-    python_requires='~=3.6',
+    python_requires='>=3.10',
     zip_safe=False,
     )
