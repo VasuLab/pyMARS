@@ -5,7 +5,7 @@ import logging
 from typing import NamedTuple, Dict
 
 import numpy as np
-import ruamel_yaml as yaml
+import ruamel.yaml as yaml
 import cantera as ct
 
 from .simulation import Simulation
