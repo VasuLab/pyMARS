@@ -175,7 +175,7 @@ class TestCreateDRGMatrix:
     def testArtificial(self):
         """Uses artificial mechanism to test"""
         # Load model
-        path_to_original = relative_location("artificial-mechanism.cti")
+        path_to_original = relative_location("artificial-mechanism.yaml")
         solution_object = ct.Solution(path_to_original)
 
 
@@ -511,7 +511,7 @@ class TestGraphSearch:
 class TestReduceDRG:
     def test_gri_reduction_multiple_cases(self):
         """Tests reduce_drg method with multiple cases"""
-        model_file = 'gri30.cti'
+        model_file = 'gri30.yaml'
 
         # Conditions for reduction
         conditions = [
@@ -554,7 +554,7 @@ class TestReduceDRG:
 
     def test_gri_reduction_limbo(self):
         """Tests reduce_drg method with limbo species"""
-        model_file = 'gri30.cti'
+        model_file = 'gri30.yaml'
 
         # Conditions for reduction
         conditions = [
@@ -595,7 +595,7 @@ class TestReduceDRG:
 class TestRunDRG:
     def test_gri_reduction(self):
         """Tests driver run_drg method"""
-        model_file = 'gri30.cti'
+        model_file = 'gri30.yaml'
 
         # Conditions for reduction
         conditions = [
@@ -624,7 +624,7 @@ class TestRunDRG:
                 )
 
         # Expected answer
-        expected_model = ct.Solution(relative_location(os.path.join('assets', 'drg_gri30.cti')))
+        expected_model = ct.Solution(relative_location(os.path.join('assets', 'drg_gri30.yaml')))
         
         # Make sure models are the same
         assert check_equal(reduced_model.model.species_names, expected_model.species_names)

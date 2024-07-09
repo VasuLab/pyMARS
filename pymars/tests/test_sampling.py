@@ -49,7 +49,7 @@ class TestCheckInputs:
              'fuel': {'CH4': 1.0}, 'oxidizer': {'O2': 1.0, 'N2': 3.76}, 'equivalence-ratio': 1.0}
              ]
         
-        conditions = parse_ignition_inputs('gri30.cti', inputs)
+        conditions = parse_ignition_inputs('gri30.yaml', inputs)
         for item in conditions:
             assert type(item) == InputIgnition
     
@@ -61,7 +61,7 @@ class TestCheckInputs:
              'end time': 10.0, 'reactants': {'CH4': 1.0, 'O2': 1.0, 'N2': 3.76}},
              ]
         
-        conditions = parse_ignition_inputs('gri30.cti', inputs)
+        conditions = parse_ignition_inputs('gri30.yaml', inputs)
         for item in conditions:
             assert type(item) == InputIgnition
     
@@ -83,7 +83,7 @@ class TestCheckInputs:
         del case[0][key]
 
         with pytest.raises(AssertionError):
-            parse_ignition_inputs('gri30.cti', case)
+            parse_ignition_inputs('gri30.yaml', case)
     
     def test_bad_fuel_oxidizer_value(self):
         """Tests correct errors for improper value.
@@ -98,7 +98,7 @@ class TestCheckInputs:
             'equivalence-ratio': 1.0
             }]
         with pytest.raises(AssertionError):
-            parse_ignition_inputs('gri30.cti', case)
+            parse_ignition_inputs('gri30.yaml', case)
         
         case = [{
             'kind': 'constant volume',
@@ -110,7 +110,7 @@ class TestCheckInputs:
             'equivalence-ratio': 1.0
             }]
         with pytest.raises(AssertionError):
-            parse_ignition_inputs('gri30.cti', case)
+            parse_ignition_inputs('gri30.yaml', case)
     
     def test_bad_species(self):
         """Tests raising error for species not in model.
@@ -125,7 +125,7 @@ class TestCheckInputs:
             'equivalence-ratio': 1.0
             }]
         with pytest.raises(AssertionError):
-            parse_ignition_inputs('gri30.cti', case)
+            parse_ignition_inputs('gri30.yaml', case)
         
         case = [{
             'kind': 'constant volume',
@@ -137,7 +137,7 @@ class TestCheckInputs:
             'equivalence-ratio': 1.0
             }]
         with pytest.raises(AssertionError):
-            parse_ignition_inputs('gri30.cti', case)
+            parse_ignition_inputs('gri30.yaml', case)
 
         case = [{
             'kind': 'constant volume',
@@ -147,4 +147,4 @@ class TestCheckInputs:
             'reactants': {'C4H10': 1.0, 'O2': 1.0, 'N2': 3.76}
             }]
         with pytest.raises(AssertionError):
-            parse_ignition_inputs('gri30.cti', case)
+            parse_ignition_inputs('gri30.yaml', case)

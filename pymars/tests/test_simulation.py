@@ -26,7 +26,7 @@ class TestSimulation:
             kind='constant volume', pressure=1.0, temperature=1000.0, equivalence_ratio=1.0,
             fuel={'CH4': 1.0}, oxidizer={'O2': 1.0, 'N2': 3.76}
             )
-        sim = Simulation(0, case, 'gri30.cti')
+        sim = Simulation(0, case, 'gri30.yaml')
         sim.setup_case()
 
         assert type(sim.reac) == ct.IdealGasReactor
@@ -44,7 +44,7 @@ class TestSimulation:
             kind='constant volume', pressure=1.0, temperature=1000.0,
             reactants={'CH4': 1.0, 'O2': 2.0, 'N2': 7.52}
             )
-        sim = Simulation(0, case, 'gri30.cti')
+        sim = Simulation(0, case, 'gri30.yaml')
         sim.setup_case()
 
         assert type(sim.reac) == ct.IdealGasReactor
@@ -62,7 +62,7 @@ class TestSimulation:
             kind='constant volume', pressure=1.0, temperature=1000.0,
             reactants={'CH4': 0.05518667, 'O2': 0.22014124, 'N2': 0.7246721}, composition_type='mass'
             )
-        sim = Simulation(0, case, 'gri30.cti')
+        sim = Simulation(0, case, 'gri30.yaml')
         sim.setup_case()
 
         assert type(sim.reac) == ct.IdealGasReactor
@@ -81,7 +81,7 @@ class TestSimulation:
             fuel={'CH4': 1.0}, oxidizer={'O2': 1.0, 'N2': 3.76}
             )
         with TemporaryDirectory() as temp_dir:
-            sim = Simulation(0, case, 'gri30.cti', path=temp_dir)
+            sim = Simulation(0, case, 'gri30.yaml', path=temp_dir)
             sim.setup_case()
             assert np.allclose(sim.run_case(), 1.066766)
 
@@ -118,7 +118,7 @@ class TestSimulation:
             fuel={'CH4': 1.0}, oxidizer={'O2': 1.0, 'N2': 3.76}, end_time=2.0
             )
         with TemporaryDirectory() as temp_dir:
-            sim = Simulation(0, case, 'gri30.cti', path=temp_dir)
+            sim = Simulation(0, case, 'gri30.yaml', path=temp_dir)
             sim.setup_case()
             assert np.allclose(sim.run_case(), 1.066766)
             assert sim.sim.time >= case.end_time
@@ -130,7 +130,7 @@ class TestSimulation:
             kind='constant volume', pressure=1.0, temperature=1000.0, reactants={'N2': 1.0}
             )
         with TemporaryDirectory() as temp_dir:
-            sim = Simulation(0, case, 'gri30.cti', path=temp_dir)
+            sim = Simulation(0, case, 'gri30.yaml', path=temp_dir)
             sim.setup_case()
             with pytest.raises(RuntimeError) as excinfo:
                 sim.run_case()
@@ -141,7 +141,7 @@ class TestSimulation:
             end_time=1.0
             )
         with TemporaryDirectory() as temp_dir:
-            sim = Simulation(0, case, 'gri30.cti', path=temp_dir)
+            sim = Simulation(0, case, 'gri30.yaml', path=temp_dir)
             sim.setup_case()
             with pytest.raises(RuntimeError) as excinfo:
                 sim.run_case()
@@ -152,7 +152,7 @@ class TestSimulation:
             max_steps=1
             )
         with TemporaryDirectory() as temp_dir:
-            sim = Simulation(0, case, 'gri30.cti', path=temp_dir)
+            sim = Simulation(0, case, 'gri30.yaml', path=temp_dir)
             sim.setup_case()
             with pytest.raises(RuntimeError) as excinfo:
                 sim.run_case()
@@ -171,7 +171,7 @@ class TestSimulation:
             'mass_fractions': tables.Float64Col(pos=3, shape=(2))
             }
         with TemporaryDirectory() as temp_dir:
-            sim = Simulation(0, None, 'gri30.cti', path=temp_dir)
+            sim = Simulation(0, None, 'gri30.yaml', path=temp_dir)
             
             sim.save_file = os.path.join(sim.path, str(sim.idx) + '.h5')
 
@@ -229,7 +229,7 @@ class TestSimulation:
             'mass_fractions': tables.Float64Col(pos=3, shape=(2))
             }
         with TemporaryDirectory() as temp_dir:
-            sim = Simulation(0, None, 'gri30.cti', path=temp_dir)
+            sim = Simulation(0, None, 'gri30.yaml', path=temp_dir)
             
             sim.save_file = os.path.join(sim.path, str(sim.idx) + '.h5')
 
@@ -282,7 +282,7 @@ class TestSimulation:
             'mass_fractions': tables.Float64Col(pos=3, shape=(2))
             }
         with TemporaryDirectory() as temp_dir:
-            sim = Simulation(0, None, 'gri30.cti', path=temp_dir)
+            sim = Simulation(0, None, 'gri30.yaml', path=temp_dir)
             sim.save_file = os.path.join(sim.path, str(sim.idx) + '.h5')
 
             with tables.open_file(sim.save_file, mode='w', title='0') as h5file:

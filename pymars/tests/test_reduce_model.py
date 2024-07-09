@@ -18,13 +18,13 @@ class TestTrim:
         """Tests removal of three species from GRI Mech 3.0.
         """
         # Original model to remove things from
-        initial_model = 'gri30.cti'
+        initial_model = 'gri30.yaml'
 
         # Create exclusion list for test case
         exclusion_list = ["CH4", "O2", "N2"]
 
         # Run trim unit
-        reduced_model = trim(initial_model, exclusion_list, 'gri30.cti')
+        reduced_model = trim(initial_model, exclusion_list, 'gri30.yaml')
 
         # Expected answer	
         expected_species_num = 50
@@ -43,13 +43,13 @@ class TestTrim:
         """Tests removal of zero species from GRI Mech 3.0.
         """
         # Original model to remove things from
-        initial_model = 'gri30.cti'
+        initial_model = 'gri30.yaml'
 
         # Create exclusion list for test case
         exclusion_list = []
 
         # Run trim unit
-        reduced_model = trim(initial_model, exclusion_list, 'reduced_gri30.cti')
+        reduced_model = trim(initial_model, exclusion_list, 'reduced_gri30.yaml')
 
         # Expected answer	
         expected_species_num = 53
@@ -64,13 +64,13 @@ class TestTrim:
         """Test removing one species from artificial model.
         """
         # Original model to remove things from
-        initial_model = relative_location(os.path.join('assets', 'artificial-mechanism.cti'))
+        initial_model = relative_location(os.path.join('assets', 'artificial-mechanism.yaml'))
 
         # Create exclusion list for test case
         exclusion_list = ['H']
 
         # Run trim unit
-        reduced_model = trim(initial_model, exclusion_list, 'a-m.cti')
+        reduced_model = trim(initial_model, exclusion_list, 'a-m.yaml')
 
         # Expected answer	
         expected_species_num = 3
@@ -92,25 +92,25 @@ class TestTrim:
         """
 
         # Original model to remove things from
-        initial_model = relative_location(os.path.join('assets', 'artificial-mechanism.cti'))
+        initial_model = relative_location(os.path.join('assets', 'artificial-mechanism.yaml'))
 
         # Create exclusion list for test case
         exclusion_list = ["H", "H2", "O2", "H2O"]
 
         with pytest.raises(ValueError):
-            reduced_model = trim(initial_model, exclusion_list, "a-m.cti")
+            reduced_model = trim(initial_model, exclusion_list, "a-m.yaml")
 
     def testArtRemoveInvalid(self):
         """Test removing species not present in model.
         """
         # Original model to remove things from
-        initial_model = relative_location(os.path.join('assets', 'artificial-mechanism.cti'))
+        initial_model = relative_location(os.path.join('assets', 'artificial-mechanism.yaml'))
 
         # Create exclusion list for test case
         exclusion_list = ['CH4']
 
         # Run trim unit
-        reduced_model = trim(initial_model, exclusion_list, 'a-m.cti')
+        reduced_model = trim(initial_model, exclusion_list, 'a-m.yaml')
 
         # Expected answer	
         expected_species_num = 4
@@ -126,13 +126,13 @@ class TestTrim:
         """Test removing mixture of species both in and not in artificial model.
         """
         # Original model to remove things from
-        initial_model = relative_location(os.path.join('assets', 'artificial-mechanism.cti'))
+        initial_model = relative_location(os.path.join('assets', 'artificial-mechanism.yaml'))
 
         # Create exclusion list for test case
         exclusion_list = ["H", "CH4"]
 
         # Run trim unit
-        reduced_model = trim(initial_model, exclusion_list, "a-m.cti")
+        reduced_model = trim(initial_model, exclusion_list, "a-m.yaml")
 
         # Expected answer	
         expected_species_num = 3
@@ -151,13 +151,13 @@ class TestTrim:
         """Test removing 10 species from GRI Mech 3.0
         """
         # Original model to remove things from
-        initial_model = 'gri30.cti'
+        initial_model = 'gri30.yaml'
 
         # Create exclusion list for test case
         exclusion_list = ["CH4", "O2", "N2", "H", "OH", "H2O", "CH2", "CH3", "CO", "AR"]
 
         # Run trim unit
-        reduced_model = trim(initial_model, exclusion_list, 'reduced_gri30.cti')
+        reduced_model = trim(initial_model, exclusion_list, 'reduced_gri30.yaml')
 
         # Expected answer	
         expected_species_num = 43
@@ -175,8 +175,8 @@ class TestTrim:
     def test_remove_explicit_third_bodies(self):
         """Tests appropriate removal of reactions with explicit third body species.
         """
-        initial_model = relative_location(os.path.join('assets', 'model-third-bodies.cti'))
-        reduced_model = trim(initial_model, ['ar', 'he'], 'test.cti')
+        initial_model = relative_location(os.path.join('assets', 'model-third-bodies.yaml'))
+        reduced_model = trim(initial_model, ['ar', 'he'], 'test.yaml')
 
         assert reduced_model.n_species == 4
         assert reduced_model.n_reactions == 1

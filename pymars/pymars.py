@@ -131,7 +131,7 @@ def main(model_file, error_limit,
     Parameters
     ----------
     model_file : str
-        Cantera-format model to be reduced (e.g., 'mech.cti').
+        Cantera-format model to be reduced (e.g., 'mech.yaml').
     error_limit : float
         Maximum error percentage for the reduced model.
     ignition_conditions : list of InputIgnition
@@ -245,7 +245,7 @@ def pymars(argv):
 
     parser.add_argument(
         '-m', '--model',
-        help='input model filename for conversion (e.g., "mech.cti").',
+        help='input model filename for conversion (e.g., "mech.yaml").',
         type=str,
         )
     parser.add_argument(

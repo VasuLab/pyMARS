@@ -19,18 +19,18 @@ class TestCompareModels:
     def test_same(self):
         """Tests that two identical models are the same.
         """
-        gas1 = ct.Solution('gri30.cti')
-        gas2 = ct.Solution('gri30.cti')
+        gas1 = ct.Solution('gri30.yaml')
+        gas2 = ct.Solution('gri30.yaml')
 
         assert compare_models(gas1, gas2)
     
     def test_missing_reactions(self):
         """Checks that a random missing reaction is detected.
         """
-        gas1 = ct.Solution('gri30.cti')
+        gas1 = ct.Solution('gri30.yaml')
 
         for __ in range(3):
-            gas2 = ct.Solution('gri30.cti')
+            gas2 = ct.Solution('gri30.yaml')
 
             idx = random.randint(0, gas2.n_reactions - 1)
             reactions = gas2.reactions()
@@ -46,10 +46,10 @@ class TestCompareModels:
     def test_missing_species(self):
         """Checks that a random missing species is detected.
         """
-        gas1 = ct.Solution('gri30.cti')
+        gas1 = ct.Solution('gri30.yaml')
 
         for __ in range(3):
-            gas2 = ct.Solution('gri30.cti')
+            gas2 = ct.Solution('gri30.yaml')
 
             idx = random.randint(0, gas2.n_species - 1)
             species = gas2.species()
@@ -154,7 +154,7 @@ class TestCompareModels:
         assert not compare_models(gas1, gas2)
 
     def test_reaction_different_arrhenius(self):
-        gas = ct.Solution('gri30.cti')
+        gas = ct.Solution('gri30.yaml')
 
         R1 = ct.ElementaryReaction.fromCti(
             '''reaction( "O + H2 <=> H + OH", [3.87000E+04, 2.7, 6260])'''
@@ -169,7 +169,7 @@ class TestCompareModels:
         assert not compare_models(gas1, gas2)
 
     def test_reaction_different_stoich(self):
-        gas = ct.Solution('gri30.cti')
+        gas = ct.Solution('gri30.yaml')
 
         R1 = ct.ElementaryReaction.fromCti(
             '''reaction( "O + H2 <=> H + OH", [3.87000E+04, 2.7, 6260])'''

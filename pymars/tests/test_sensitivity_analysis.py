@@ -64,7 +64,7 @@ class TestRunSA:
     def test_drgepsa(self):
         """Test SA using stored DRGEP result with upper_threshold = 0.5
         """
-        starting_model = relative_location(os.path.join('assets', 'drgep_gri30.cti'))
+        starting_model = relative_location(os.path.join('assets', 'drgep_gri30.yaml'))
         conditions = [
             InputIgnition(
                 kind='constant volume', pressure=1.0, temperature=1000.0, equivalence_ratio=1.0,
@@ -85,7 +85,7 @@ class TestRunSA:
         limbo_species = ['H2', 'H2O2', 'CH2(S)', 'C2H4', 'C2H5', 'C2H6', 'HCCO', 'CH2CO']
 
         # Get expected model	
-        expected_model = ct.Solution(relative_location(os.path.join('assets', 'drgepsa_gri30.cti')))
+        expected_model = ct.Solution(relative_location(os.path.join('assets', 'drgepsa_gri30.yaml')))
 
         # try using initial SA method
         with TemporaryDirectory() as temp_dir:

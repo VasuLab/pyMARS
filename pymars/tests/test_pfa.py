@@ -385,7 +385,7 @@ class TestGraphSearch:
 class TestReducePFA:
     def test_gri_reduction_multiple_thresholds(self):
         """Tests reduce_pfa method with multiple thresholds"""
-        model_file = 'gri30.cti'
+        model_file = 'gri30.yaml'
 
         # Conditions for reduction
         conditions = [
@@ -430,7 +430,7 @@ class TestReducePFA:
 class TestRunPFA:
     def test_gri_reduction(self):
         """Tests driver run_pfa method"""
-        model_file = 'gri30.cti'
+        model_file = 'gri30.yaml'
 
         # Conditions for reduction
         conditions = [
@@ -459,7 +459,7 @@ class TestRunPFA:
                 )
 
         # Expected answer
-        expected_model = ct.Solution(relative_location(os.path.join('assets', 'pfa_gri30.cti')))
+        expected_model = ct.Solution(relative_location(os.path.join('assets', 'pfa_gri30.yaml')))
         
         # Make sure models are the same
         assert check_equal(reduced_model.model.species_names, expected_model.species_names)

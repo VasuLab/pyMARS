@@ -72,7 +72,7 @@ class TestTrimDRGEP:
     def testGRItrim51(self):
 
         # Original model
-        solution_object = ct.Solution("gri30.cti")
+        solution_object = ct.Solution("gri30.yaml")
 
         # Dictionary, retained species, and threshold value to input
         max_dict = {"CH4": 1.0, "N2": .25, "O2": .75}
@@ -103,7 +103,7 @@ class TestTrimDRGEP:
     def testArtTrim1(self):
 
         # Original model
-        path_to_original = relative_location("artificial-mechanism.cti")
+        path_to_original = relative_location("artificial-mechanism.yaml")
         solution_object = ct.Solution(path_to_original)
 
         # Dictionary, retained species, and threshold value to input
@@ -134,7 +134,7 @@ class TestTrimDRGEP:
     def testArtTrim2(self):
 
         # Original model
-        path_to_original = relative_location("artificial-mechanism.cti")
+        path_to_original = relative_location("artificial-mechanism.yaml")
         solution_object = ct.Solution(path_to_original)
 
         # Dictionary, retained species, and threshold value to input
@@ -167,7 +167,7 @@ class TestTrimDRGEP:
     def testArtRetain(self):
 
         # Original model
-        path_to_original = relative_location("artificial-mechanism.cti")
+        path_to_original = relative_location("artificial-mechanism.yaml")
         solution_object = ct.Solution(path_to_original)
 
         # Dictionary, retained species, and threshold value to input
@@ -198,7 +198,7 @@ class TestTrimDRGEP:
     def testArtRemoveAll(self):
 
         # Original model
-        path_to_original = relative_location("artificial-mechanism.cti")
+        path_to_original = relative_location("artificial-mechanism.yaml")
         solution_object = ct.Solution(path_to_original)
 
         # Dictionary, retained species, and threshold value to input
@@ -232,7 +232,7 @@ class TestTrimDRGEP:
     def testArtRemoveEqual(self):
 
         # Original model
-        path_to_original = relative_location("artificial-mechanism.cti")
+        path_to_original = relative_location("artificial-mechanism.yaml")
         solution_object = ct.Solution(path_to_original)
 
         # Dictionary, retained species, and threshold value to input
@@ -263,7 +263,7 @@ class TestTrimDRGEP:
     def testEmptyDict(self):
 
         # Original model
-        path_to_original = relative_location("artificial-mechanism.cti")
+        path_to_original = relative_location("artificial-mechanism.yaml")
         solution_object = ct.Solution(path_to_original)
 
         # Dictionary, retained species, and threshold value to input
@@ -297,7 +297,7 @@ class TestTrimDRGEP:
     def testInvalidDict(self):
 
         # Original model
-        path_to_original = relative_location("artificial-mechanism.cti")
+        path_to_original = relative_location("artificial-mechanism.yaml")
         solution_object = ct.Solution(path_to_original)
 
         # Dictionary, retained species, and threshold value to input
@@ -329,7 +329,7 @@ class TestTrimDRGEP:
     def testThresholdGreaterThan1(self):
 
         # Original model
-        path_to_original = relative_location("artificial-mechanism.cti")
+        path_to_original = relative_location("artificial-mechanism.yaml")
         solution_object = ct.Solution(path_to_original)
 
         # Dictionary, retained species, and threshold value to input
@@ -678,7 +678,7 @@ class TestGetImportanceCoeffs:
 class TestRunDRGEP:
     def test_gri_reduction(self):
         """Tests driver run_drgep method"""
-        model_file = 'gri30.cti'
+        model_file = 'gri30.yaml'
 
         # Conditions for reduction
         conditions = [
@@ -707,7 +707,7 @@ class TestRunDRGEP:
                 )
 
         # Expected answer
-        expected_model = ct.Solution(relative_location(os.path.join('assets', 'drgep_gri30.cti')))
+        expected_model = ct.Solution(relative_location(os.path.join('assets', 'drgep_gri30.yaml')))
         
         # Make sure models are the same
         assert check_equal(reduced_model.model.species_names, expected_model.species_names)
