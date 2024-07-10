@@ -62,7 +62,7 @@ def trim(initial_model_file, exclusion_list, new_model_file, phase_name=''):
     # Create new solution based on remaining species and reactions
     new_solution = ct.Solution(
         species=final_species, reactions=final_reactions,
-        thermo='IdealGas', kinetics='GasKinetics'
+        thermo='ideal-gas', kinetics='gas'
         )
     new_solution.TP = solution.TP
     if phase_name:

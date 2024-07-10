@@ -78,7 +78,7 @@ class TestCreatePFAMatrix:
         for sp in [F, R, P, Pp]:
             sp.thermo = ct.ConstantCp(300, 1000, 101325, (300, 1.0, 1.0, 1.0))
 
-        model = ct.Solution(thermo='IdealGas', kinetics='GasKinetics', species=[F, R, P, Pp], reactions=[])
+        model = ct.Solution(thermo='ideal-gas', kinetics='gas', species=[F, R, P, Pp], reactions=[])
 
         R1 = ct.Reaction.from_yaml("equation: 'F => R'\nrate-constant: {A: 1.0, b: 0.0, Ea: 0.0}", model)
         R2 = ct.Reaction.from_yaml("equation: 'R => P'\nrate-constant: {A: 1.0e3, b: 0.0, Ea: 0.0}", model)
@@ -110,7 +110,7 @@ class TestCreatePFAMatrix:
         for sp in [F, R, P]:
             sp.thermo = ct.ConstantCp(300, 1000, 101325, (300, 1.0, 1.0, 1.0))
 
-        model = ct.Solution(thermo='IdealGas', kinetics='GasKinetics', species=[F, R, P], reactions=[])
+        model = ct.Solution(thermo='ideal-gas', kinetics='gas', species=[F, R, P], reactions=[])
 
         R1 = ct.Reaction.from_yaml("equation: 'F <=> R'\nrate-constant: {A: 1.0e3, b: 0.0, Ea: 0.0}", model)
         R2 = ct.Reaction.from_yaml("equation: 'R <=> P'\nrate-constant: {A: 1.0, b: 0.0, Ea: 0.0}", model)
@@ -141,7 +141,7 @@ class TestCreatePFAMatrix:
         for sp in [A, B, C]:
             sp.thermo = ct.ConstantCp(300, 1000, 101325, (300, 1.0, 1.0, 1.0))
 
-        model = ct.Solution(thermo='IdealGas', kinetics='GasKinetics', species=[A, B, C], reactions=[])
+        model = ct.Solution(thermo='ideal-gas', kinetics='gas', species=[A, B, C], reactions=[])
 
         R1 = ct.Reaction.from_yaml("equation: 'A <=> B'\nrate-constant: {A: 1.0, b: 0.0, Ea: 0.0}", model)
         R2 = ct.Reaction.from_yaml("equation: 'B <=> C'\nrate-constant: {A: 1.0e-3, b: 0.0, Ea: 0.0}", model)
