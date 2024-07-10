@@ -1,8 +1,6 @@
 """Tests for drg module"""
 
-import sys
-import os
-import pkg_resources
+import importlib.resources
 from tempfile import TemporaryDirectory
 
 import pytest
@@ -10,13 +8,13 @@ import numpy as np
 import networkx as nx
 import cantera as ct
 
-from ..sampling import data_files, InputIgnition
-from ..drg import graph_search, create_drg_matrix, run_drg, trim_drg, reduce_drg
+from pymars.sampling import data_files, InputIgnition
+from pymars.drg import graph_search, create_drg_matrix, run_drg, trim_drg, reduce_drg
 
 
-def relative_location(file):
-    file_path = os.path.join(file)
-    return pkg_resources.resource_filename(__name__, file_path)
+def get_asset_path(filename: str) -> str:
+    """Returns the file path to the requested asset file."""
+    return str(importlib.resources.files('pymars.tests.assets').joinpath(filename))
 
 
 def check_equal(list1, list2):
@@ -152,7 +150,7 @@ class TestCreateDRGMatrix:
     def testArtificial(self):
         """Uses artificial mechanism to test"""
         # Load model
-        path_to_original = relative_location("artificial-mechanism.yaml")
+        path_to_original = get_asset_path('artificial-mechanism.yaml')
         solution_object = ct.Solution(path_to_original)
 
 
@@ -501,10 +499,7 @@ class TestReduceDRG:
                 ),
         ]
         
-        data = np.genfromtxt(
-            relative_location(os.path.join('assets', 'example_ignition_data.dat')), 
-            delimiter=','
-            )
+        data = np.genfromtxt(get_asset_path('example_ignition_data.dat'), delimiter=',')
 
         model = ct.Solution(model_file)
         matrices = []
@@ -540,10 +535,7 @@ class TestReduceDRG:
                 ),
         ]
         
-        data = np.genfromtxt(
-            relative_location(os.path.join('assets', 'example_ignition_data.dat')), 
-            delimiter=','
-            )
+        data = np.genfromtxt(get_asset_path('example_ignition_data.dat'), delimiter=',')
 
         model = ct.Solution(model_file)
         matrices = []
@@ -584,12 +576,8 @@ class TestRunDRG:
                 fuel={'CH4': 1.0}, oxidizer={'O2': 1.0, 'N2': 3.76}
                 ),
         ]
-        data_files['output_ignition'] = relative_location(
-            os.path.join('assets', 'example_ignition_output.txt')
-            )
-        data_files['data_ignition'] = relative_location(
-            os.path.join('assets', 'example_ignition_data.dat')
-            )
+        data_files['output_ignition'] = get_asset_path('example_ignition_output.txt')
+        data_files['data_ignition'] = get_asset_path('example_ignition_data.dat')
         error = 5.0
 
         # Run DRG
@@ -600,7 +588,7 @@ class TestRunDRG:
                 )
 
         # Expected answer
-        expected_model = ct.Solution(relative_location(os.path.join('assets', 'drg_gri30.yaml')))
+        expected_model = ct.Solution(get_asset_path('drg_gri30.yaml'))
         
         # Make sure models are the same
         assert check_equal(reduced_model.model.species_names, expected_model.species_names)

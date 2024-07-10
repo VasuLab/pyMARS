@@ -1,8 +1,7 @@
 """Tests for drgep module"""
 
-import sys
+import importlib.resources
 import os
-import pkg_resources
 from tempfile import TemporaryDirectory
 
 import pytest
@@ -10,14 +9,14 @@ import numpy as np
 import cantera as ct
 import networkx as nx
 
-from ..sampling import data_files, InputIgnition
-from ..drgep import create_drgep_matrix, graph_search_drgep, get_importance_coeffs
-from ..drgep import reduce_drgep, run_drgep
+from pymars.sampling import data_files, InputIgnition
+from pymars.drgep import graph_search_drgep, get_importance_coeffs
+from pymars.drgep import run_drgep
 
 
-def relative_location(file):
-    file_path = os.path.join(file)
-    return pkg_resources.resource_filename(__name__, file_path)
+def get_asset_path(filename: str) -> str:
+    """Returns the file path to the requested asset file."""
+    return str(importlib.resources.files('pymars.tests.assets').joinpath(filename))
 
 
 def check_equal(list1, list2):
@@ -82,7 +81,7 @@ class TestTrimDRGEP:
     def testArtTrim1(self):
 
         # Original model
-        path_to_original = relative_location("artificial-mechanism.yaml")
+        path_to_original = get_asset_path('artificial-mechanism.yaml')
         solution_object = ct.Solution(path_to_original)
 
         # Dictionary, retained species, and threshold value to input
@@ -113,7 +112,7 @@ class TestTrimDRGEP:
     def testArtTrim2(self):
 
         # Original model
-        path_to_original = relative_location("artificial-mechanism.yaml")
+        path_to_original = get_asset_path('artificial-mechanism.yaml')
         solution_object = ct.Solution(path_to_original)
 
         # Dictionary, retained species, and threshold value to input
@@ -146,7 +145,7 @@ class TestTrimDRGEP:
     def testArtRetain(self):
 
         # Original model
-        path_to_original = relative_location("artificial-mechanism.yaml")
+        path_to_original = get_asset_path('artificial-mechanism.yaml')
         solution_object = ct.Solution(path_to_original)
 
         # Dictionary, retained species, and threshold value to input
@@ -177,7 +176,7 @@ class TestTrimDRGEP:
     def testArtRemoveAll(self):
 
         # Original model
-        path_to_original = relative_location("artificial-mechanism.yaml")
+        path_to_original = get_asset_path('artificial-mechanism.yaml')
         solution_object = ct.Solution(path_to_original)
 
         # Dictionary, retained species, and threshold value to input
@@ -211,7 +210,7 @@ class TestTrimDRGEP:
     def testArtRemoveEqual(self):
 
         # Original model
-        path_to_original = relative_location("artificial-mechanism.yaml")
+        path_to_original = get_asset_path('artificial-mechanism.yaml')
         solution_object = ct.Solution(path_to_original)
 
         # Dictionary, retained species, and threshold value to input
@@ -242,7 +241,7 @@ class TestTrimDRGEP:
     def testEmptyDict(self):
 
         # Original model
-        path_to_original = relative_location("artificial-mechanism.yaml")
+        path_to_original = get_asset_path('artificial-mechanism.yaml')
         solution_object = ct.Solution(path_to_original)
 
         # Dictionary, retained species, and threshold value to input
@@ -276,7 +275,7 @@ class TestTrimDRGEP:
     def testInvalidDict(self):
 
         # Original model
-        path_to_original = relative_location("artificial-mechanism.yaml")
+        path_to_original = get_asset_path('artificial-mechanism.yaml')
         solution_object = ct.Solution(path_to_original)
 
         # Dictionary, retained species, and threshold value to input
@@ -308,7 +307,7 @@ class TestTrimDRGEP:
     def testThresholdGreaterThan1(self):
 
         # Original model
-        path_to_original = relative_location("artificial-mechanism.yaml")
+        path_to_original = get_asset_path('artificial-mechanism.yaml')
         solution_object = ct.Solution(path_to_original)
 
         # Dictionary, retained species, and threshold value to input
@@ -670,12 +669,8 @@ class TestRunDRGEP:
                 fuel={'CH4': 1.0}, oxidizer={'O2': 1.0, 'N2': 3.76}
                 ),
         ]
-        data_files['output_ignition'] = relative_location(
-            os.path.join('assets', 'example_ignition_output.txt')
-            )
-        data_files['data_ignition'] = relative_location(
-            os.path.join('assets', 'example_ignition_data.dat')
-            )
+        data_files['output_ignition'] = get_asset_path('example_ignition_output.txt')
+        data_files['data_ignition'] = get_asset_path('example_ignition_data.dat')
         error = 5.0
 
         # Run DRG
@@ -686,7 +681,7 @@ class TestRunDRGEP:
                 )
 
         # Expected answer
-        expected_model = ct.Solution(relative_location(os.path.join('assets', 'drgep_gri30.yaml')))
+        expected_model = ct.Solution(get_asset_path('drgep_gri30.yaml'))
         
         # Make sure models are the same
         assert check_equal(reduced_model.model.species_names, expected_model.species_names)

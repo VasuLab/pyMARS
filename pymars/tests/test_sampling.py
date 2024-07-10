@@ -1,19 +1,8 @@
 """ Tests the sampling module in pyMARS """
 
-import os
-import pkg_resources
-
 import pytest
-import numpy as np
-import cantera as ct
-import ruamel.yaml as yaml
 
-from ..sampling import parse_ignition_inputs, InputIgnition
-
-
-def relative_location(file):
-    file_path = os.path.join(file)
-    return pkg_resources.resource_filename(__name__, file_path)
+from pymars.sampling import parse_ignition_inputs, InputIgnition
 
 
 class TestCheckInputs:

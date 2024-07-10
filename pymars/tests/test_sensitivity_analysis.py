@@ -1,20 +1,15 @@
-import sys
-import os
-import pkg_resources
+import importlib.resources
 from tempfile import TemporaryDirectory
 
-import pytest
-import numpy as np
-import networkx as nx
 import cantera as ct
 
-from ..sampling import data_files, InputIgnition
-from ..sensitivity_analysis import run_sa
+from pymars.sampling import data_files, InputIgnition
+from pymars.sensitivity_analysis import run_sa
 
 
-def relative_location(file):
-    file_path = os.path.join(file)
-    return pkg_resources.resource_filename(__name__, file_path)
+def get_asset_path(filename: str) -> str:
+    """Returns the file path to the requested asset file."""
+    return str(importlib.resources.files('pymars.tests.assets').joinpath(filename))
 
 
 def check_equal(list1, list2):
@@ -42,7 +37,7 @@ class TestRunSA:
     def test_drgepsa(self):
         """Test SA using stored DRGEP result with upper_threshold = 0.5
         """
-        starting_model = relative_location(os.path.join('assets', 'drgep_gri30.yaml'))
+        starting_model = get_asset_path('drgep_gri30.yaml')
         conditions = [
             InputIgnition(
                 kind='constant volume', pressure=1.0, temperature=1000.0, equivalence_ratio=1.0,
@@ -53,17 +48,13 @@ class TestRunSA:
                 fuel={'CH4': 1.0}, oxidizer={'O2': 1.0, 'N2': 3.76}
                 ),
         ]
-        data_files['output_ignition'] = relative_location(
-            os.path.join('assets', 'example_ignition_output.txt')
-            )
-        data_files['data_ignition'] = relative_location(
-            os.path.join('assets', 'example_ignition_data.dat')
-            )
+        data_files['output_ignition'] = get_asset_path('example_ignition_output.txt')
+        data_files['data_ignition'] = get_asset_path('example_ignition_data.dat')
         
         limbo_species = ['H2', 'H2O2', 'CH2(S)', 'C2H4', 'C2H5', 'C2H6', 'HCCO', 'CH2CO']
 
         # Get expected model	
-        expected_model = ct.Solution(relative_location(os.path.join('assets', 'drgepsa_gri30.yaml')))
+        expected_model = ct.Solution(get_asset_path('drgepsa_gri30.yaml'))
 
         # try using initial SA method
         with TemporaryDirectory() as temp_dir:

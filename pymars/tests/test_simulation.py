@@ -1,8 +1,6 @@
 """ Tests the simulation module used by pyMARS """
 
 import os
-import pkg_resources
-import random
 from tempfile import TemporaryDirectory
 
 import pytest
@@ -10,12 +8,8 @@ import numpy as np
 import cantera as ct
 import tables
 
-from ..sampling import InputIgnition
-from ..simulation import Simulation
-
-def relative_location(file):
-    file_path = os.path.join(file)
-    return pkg_resources.resource_filename(__name__, file_path)
+from pymars.sampling import InputIgnition
+from pymars.simulation import Simulation
 
 
 class TestSimulation:

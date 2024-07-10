@@ -1,16 +1,15 @@
 """ Tests the create trimmed model unit used by pyMARS """
 
-import os
-import pkg_resources
+import importlib.resources
 
 import pytest
-import cantera as ct
 
-from ..reduce_model import trim
+from pymars.reduce_model import trim
 
-def relative_location(file):
-    file_path = os.path.join(file)
-    return pkg_resources.resource_filename(__name__, file_path)
+
+def get_asset_path(filename: str) -> str:
+    """Returns the file path to the requested asset file."""
+    return str(importlib.resources.files('pymars.tests.assets').joinpath(filename))
 
 
 class TestTrim:
@@ -64,7 +63,7 @@ class TestTrim:
         """Test removing one species from artificial model.
         """
         # Original model to remove things from
-        initial_model = relative_location(os.path.join('assets', 'artificial-mechanism.yaml'))
+        initial_model = get_asset_path('artificial-mechanism.yaml')
 
         # Create exclusion list for test case
         exclusion_list = ['H']
@@ -92,7 +91,7 @@ class TestTrim:
         """
 
         # Original model to remove things from
-        initial_model = relative_location(os.path.join('assets', 'artificial-mechanism.yaml'))
+        initial_model = get_asset_path('artificial-mechanism.yaml')
 
         # Create exclusion list for test case
         exclusion_list = ["H", "H2", "O2", "H2O"]
@@ -104,7 +103,7 @@ class TestTrim:
         """Test removing species not present in model.
         """
         # Original model to remove things from
-        initial_model = relative_location(os.path.join('assets', 'artificial-mechanism.yaml'))
+        initial_model = get_asset_path('artificial-mechanism.yaml')
 
         # Create exclusion list for test case
         exclusion_list = ['CH4']
@@ -126,7 +125,7 @@ class TestTrim:
         """Test removing mixture of species both in and not in artificial model.
         """
         # Original model to remove things from
-        initial_model = relative_location(os.path.join('assets', 'artificial-mechanism.yaml'))
+        initial_model = get_asset_path('artificial-mechanism.yaml')
 
         # Create exclusion list for test case
         exclusion_list = ["H", "CH4"]
@@ -175,7 +174,7 @@ class TestTrim:
     def test_remove_explicit_third_bodies(self):
         """Tests appropriate removal of reactions with explicit third body species.
         """
-        initial_model = relative_location(os.path.join('assets', 'model-third-bodies.yaml'))
+        initial_model = get_asset_path('model-third-bodies.yaml')
         reduced_model = trim(initial_model, ['ar', 'he'], 'test.yaml')
 
         assert reduced_model.n_species == 4

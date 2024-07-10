@@ -1,22 +1,20 @@
 """Tests for pfa module"""
-import sys
-import os
-import pkg_resources
+
+import importlib.resources
 from tempfile import TemporaryDirectory
 
 import pytest
-
 import numpy as np
 import networkx as nx
 import cantera as ct
 
-from ..sampling import data_files, InputIgnition
-from ..pfa import graph_search, create_pfa_matrix, run_pfa, reduce_pfa
+from pymars.sampling import data_files, InputIgnition
+from pymars.pfa import graph_search, create_pfa_matrix, run_pfa, reduce_pfa
 
 
-def relative_location(file):
-	file_path = os.path.join(file)
-	return pkg_resources.resource_filename(__name__, file_path)
+def get_asset_path(filename: str) -> str:
+    """Returns the file path to the requested asset file."""
+    return str(importlib.resources.files('pymars.tests.assets').joinpath(filename))
 
 
 def check_equal(list1, list2):
@@ -376,10 +374,7 @@ class TestReducePFA:
                 ),
         ]
 
-        data = np.genfromtxt(
-            relative_location(os.path.join('assets', 'example_ignition_data.dat')), 
-            delimiter=','
-            )
+        data = np.genfromtxt(get_asset_path('example_ignition_data.dat'), delimiter=',')
 
         model = ct.Solution(model_file)
         matrices = []
@@ -399,6 +394,7 @@ class TestReducePFA:
             'C2H4', 'C2H5', 'C2H6', 'HCCO', 'CH2CO', 'N', 'NH', 'NH2', 'NNH', 'NO', 'N2O',
             'HNO', 'CN', 'HCN', 'H2CN', 'HCNN', 'HCNO', 'HOCN', 'HNCO', 'NCO', 'N2', 'CH2CHO'
             ]
+
         assert check_equal(reduced_model.model.species_names, expected_species)
         assert reduced_model.model.n_reactions == 281
         assert round(reduced_model.error, 2) == .14
@@ -420,12 +416,8 @@ class TestRunPFA:
                 fuel={'CH4': 1.0}, oxidizer={'O2': 1.0, 'N2': 3.76}
                 ),
         ]
-        data_files['output_ignition'] = relative_location(
-            os.path.join('assets', 'example_ignition_output.txt')
-            )
-        data_files['data_ignition'] = relative_location(
-            os.path.join('assets', 'example_ignition_data.dat')
-            )
+        data_files['output_ignition'] = get_asset_path('example_ignition_output.txt')
+        data_files['data_ignition'] = get_asset_path('example_ignition_data.dat')
         error = 5.0
 
         # Run PFA
@@ -436,7 +428,7 @@ class TestRunPFA:
                 )
 
         # Expected answer
-        expected_model = ct.Solution(relative_location(os.path.join('assets', 'pfa_gri30.yaml')))
+        expected_model = ct.Solution(get_asset_path('pfa_gri30.yaml'))
         
         # Make sure models are the same
         assert check_equal(reduced_model.model.species_names, expected_model.species_names)
