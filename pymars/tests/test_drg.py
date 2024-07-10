@@ -3,6 +3,7 @@
 import sys
 import os
 import pkg_resources
+from tempfile import TemporaryDirectory
 
 import pytest
 import numpy as np
@@ -11,29 +12,6 @@ import cantera as ct
 
 from ..sampling import data_files, InputIgnition
 from ..drg import graph_search, create_drg_matrix, run_drg, trim_drg, reduce_drg
-
-# Taken from http://stackoverflow.com/a/22726782/1569494
-try:
-    from tempfile import TemporaryDirectory
-except ImportError:
-    from contextlib import contextmanager
-    import shutil
-    import tempfile
-    import errno
-
-    @contextmanager
-    def TemporaryDirectory():
-        name = tempfile.mkdtemp()
-        try:
-            yield name
-        finally:
-            try:
-                shutil.rmtree(name)
-            except OSError as e:
-                # Reraise unless ENOENT: No such file or directory
-                # (ok if directory has already been deleted)
-                if e.errno != errno.ENOENT:
-                    raise
 
 
 def relative_location(file):

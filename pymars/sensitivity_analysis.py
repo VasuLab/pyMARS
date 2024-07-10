@@ -1,35 +1,13 @@
 """Module containing sensitivity analysis reduction stage. """
 import logging
 import os
+from tempfile import TemporaryDirectory
 
 import numpy as np
 import cantera as ct
 
 from .sampling import sample_metrics, calculate_error, read_metrics
 from .reduce_model import trim, ReducedModel
-
-# Taken from http://stackoverflow.com/a/22726782/1569494
-try:
-    from tempfile import TemporaryDirectory
-except ImportError:
-    from contextlib import contextmanager
-    import shutil
-    import tempfile
-    import errno
-
-    @contextmanager
-    def TemporaryDirectory():
-        name = tempfile.mkdtemp()
-        try:
-            yield name
-        finally:
-            try:
-                shutil.rmtree(name)
-            except OSError as e:
-                # Reraise unless ENOENT: No such file or directory
-                # (ok if directory has already been deleted)
-                if e.errno != errno.ENOENT:
-                    raise
 
 
 def evaluate_species_errors(starting_model, ignition_conditions, metrics, species_limbo, 
