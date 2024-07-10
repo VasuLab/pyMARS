@@ -70,22 +70,22 @@ class TestCreatePFAMatrix:
         
         # R \approx F / 1e3
         """
-        R1 = ct.Reaction.fromCti('''reaction('F => R', [1.0, 0.0, 0.0])''')
-        R2 = ct.Reaction.fromCti('''reaction('R => P', [1.0e3, 0.0, 0.0])''')
-        R3 = ct.Reaction.fromCti('''reaction('R => Pp', [1.0, 0.0, 0.0])''')
 
         F = ct.Species('F', 'H:1')
         R = ct.Species('R', 'H:1')
         P = ct.Species('P', 'H:1')
         Pp = ct.Species('Pp', 'H:1')
         for sp in [F, R, P, Pp]:
-            sp.thermo = ct.ConstantCp(
-                300, 1000, 101325, (300, 1.0, 1.0, 1.0)
-                )
-        model = ct.Solution(
-            thermo='IdealGas', kinetics='GasKinetics',
-            species=[F, R, P, Pp], reactions=[R1, R2, R3]
-            )
+            sp.thermo = ct.ConstantCp(300, 1000, 101325, (300, 1.0, 1.0, 1.0))
+
+        model = ct.Solution(thermo='IdealGas', kinetics='GasKinetics', species=[F, R, P, Pp], reactions=[])
+
+        R1 = ct.Reaction.from_yaml("equation: 'F => R'\nrate-constant: {A: 1.0, b: 0.0, Ea: 0.0}", model)
+        R2 = ct.Reaction.from_yaml("equation: 'R => P'\nrate-constant: {A: 1.0e3, b: 0.0, Ea: 0.0}", model)
+        R3 = ct.Reaction.from_yaml("equation: 'R => Pp'\nrate-constant: {A: 1.0, b: 0.0, Ea: 0.0}", model)
+        for r in [R1, R2, R3]:
+            model.add_reaction(r)
+
         mass_fracs = [1., 1./1.e3, 0., 0.]
         state = 1000, ct.one_atm, mass_fracs
         matrix = create_pfa_matrix(state, model)
@@ -102,21 +102,21 @@ class TestCreatePFAMatrix:
         """Test using three species artificial model with PE reactions from 2006 DRG paper.
         # Confirmed by hand.
         """
-        R1 = ct.Reaction.fromCti('''reaction('F <=> R', [1.0e3, 0.0, 0.0])''')
-        R2 = ct.Reaction.fromCti('''reaction('R <=> P', [1.0, 0.0, 0.0])''')
 
         F = ct.Species('F', 'H:1')
         R = ct.Species('R', 'H:1')
         P = ct.Species('P', 'H:1')
 
         for sp in [F, R, P]:
-            sp.thermo = ct.ConstantCp(
-                300, 1000, 101325, (300, 1.0, 1.0, 1.0)
-                )
-        model = ct.Solution(
-            thermo='IdealGas', kinetics='GasKinetics',
-            species=[F, R, P], reactions=[R1, R2]
-            )
+            sp.thermo = ct.ConstantCp(300, 1000, 101325, (300, 1.0, 1.0, 1.0))
+
+        model = ct.Solution(thermo='IdealGas', kinetics='GasKinetics', species=[F, R, P], reactions=[])
+
+        R1 = ct.Reaction.from_yaml("equation: 'F <=> R'\nrate-constant: {A: 1.0e3, b: 0.0, Ea: 0.0}", model)
+        R2 = ct.Reaction.from_yaml("equation: 'R <=> P'\nrate-constant: {A: 1.0, b: 0.0, Ea: 0.0}", model)
+        for r in [R1, R2]:
+            model.add_reaction(r)
+
         conc_R = 0.1
         conc_F = ((1 + 1e-3)*conc_R - (1/2e3))/(1 - (1/2e3))
         conc_P = 1.0 - (conc_R + conc_F)
@@ -134,21 +134,20 @@ class TestCreatePFAMatrix:
         """Test using three species artificial model with dormant modes from 2006 DRG paper.
         # Confirmed by hand. 
         """
-        R1 = ct.Reaction.fromCti('''reaction('A <=> B', [1.0, 0.0, 0.0])''')
-        R2 = ct.Reaction.fromCti('''reaction('B <=> C', [1.0e-3, 0.0, 0.0])''')
 
         A = ct.Species('A', 'H:1')
         B = ct.Species('B', 'H:1')
         C = ct.Species('C', 'H:1')
-
         for sp in [A, B, C]:
-            sp.thermo = ct.ConstantCp(
-                300, 1000, 101325, (300, 1.0, 1.0, 1.0)
-                )
-        model = ct.Solution(
-            thermo='IdealGas', kinetics='GasKinetics',
-            species=[A, B, C], reactions=[R1, R2]
-            )
+            sp.thermo = ct.ConstantCp(300, 1000, 101325, (300, 1.0, 1.0, 1.0))
+
+        model = ct.Solution(thermo='IdealGas', kinetics='GasKinetics', species=[A, B, C], reactions=[])
+
+        R1 = ct.Reaction.from_yaml("equation: 'A <=> B'\nrate-constant: {A: 1.0, b: 0.0, Ea: 0.0}", model)
+        R2 = ct.Reaction.from_yaml("equation: 'B <=> C'\nrate-constant: {A: 1.0e-3, b: 0.0, Ea: 0.0}", model)
+        for r in [R1, R2]:
+            model.add_reaction(r)
+
         state = 1000, ct.one_atm, [1.0, 2.0, 1.0]
         matrix = create_pfa_matrix(state, model)
 
