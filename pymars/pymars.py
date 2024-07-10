@@ -5,7 +5,7 @@ import logging
 from argparse import ArgumentParser
 from typing import List, Dict, NamedTuple
 
-import ruamel.yaml as yaml
+from ruamel.yaml import YAML
 import cantera as ct
 
 # local imports
@@ -272,7 +272,8 @@ def pymars(argv):
         parser.error('A YAML input file needs to be specified using -i or --input')
 
     with open(args.input, 'r') as the_file:
-        input_dict = yaml.safe_load(the_file)
+        yaml = YAML(typ='safe')
+        input_dict = yaml.load(the_file)
 
     inputs = parse_inputs(input_dict)
 
