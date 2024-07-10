@@ -19,10 +19,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Removed the `convert` tool and command line option, instead use Cantera's `yaml2ck` and `ck2yaml` 
 - Removed `soln2ck` and `soln2cti` modules - internal calls are replaced with Cantera's `Solution.write_yaml` member 
   function
-
-### Fixed
-
-- Fixed bug in soln2ck.py where the reaction high rate was being used instead of the reaction low rate.
+- Removed the `compare_models` tool as it was not working as intended and serves no purpose with the removal of 
+  `soln2cti`
 
 ## [1.1.0] - 2019-09-06
 
