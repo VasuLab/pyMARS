@@ -383,7 +383,7 @@ class TestReducePFA:
         
         with TemporaryDirectory() as temp_dir:
             reduced_model = reduce_pfa(
-                model_file, ['CH4', 'O2'], ['N2'], 0.14, matrices, 
+                model_file, ['CH4', 'O2'], ['N2'], 0.15, matrices,
                 conditions, np.array([1.066766136745876281e+00, 4.334773545084597696e-02]),
                 previous_model=None, threshold_upper=None, num_threads=1, path=temp_dir
                 )
